@@ -99,9 +99,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Notify in Telegram
-        uses: appleboy/telegram-action@v0.0.5
+        uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            Kittygram successfully deployed and passed all tests!
+          message: Kittygram successfully deployed!
