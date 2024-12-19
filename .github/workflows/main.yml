@@ -32,12 +32,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push Docker images
         run: |
-          docker build -t username/kittygram_backend ./backend
-          docker push username/kittygram_backend
-          docker build -t username/kittygram_frontend ./frontend
-          docker push username/kittygram_frontend
-          docker build -t username/kittygram_gateway ./nginx
-          docker push username/kittygram_gateway
+          docker build -t praeitor/kittygram_backend ./backend
+          docker push praeitor/kittygram_backend
+          docker build -t praeitor/kittygram_frontend ./frontend
+          docker push praeitor/kittygram_frontend
+          docker build -t praeitor/kittygram_gateway ./nginx
+          docker push praeitor/kittygram_gateway
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.3
         with:
