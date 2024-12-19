@@ -2,8 +2,7 @@ version: '3.8'
 
 services:
   gateway:
-    build:
-      context: ./nginx
+    image: praeitor/kittygram_gateway:latest
     container_name: gateway
     ports:
       - "9000:80"
@@ -15,8 +14,7 @@ services:
       - frontend
 
   backend:
-    build:
-      context: ./backend
+    image: praeitor/kittygram_backend:latest
     container_name: backend
     env_file: .env
     volumes:
@@ -26,8 +24,7 @@ services:
       - postgres
 
   frontend:
-    build:
-      context: ./frontend
+    image: praeitor/kittygram_frontend:latest
     container_name: frontend
     volumes:
       - static:/app/build
