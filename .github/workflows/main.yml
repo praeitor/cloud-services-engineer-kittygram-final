@@ -68,8 +68,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd kittygram
-            docker-compose pull
-            docker-compose up -d
+            sudo docker compose -f docker-compose.production.yml pull
+            sudo docker compose -f docker-compose.production.yml down
+            sudo docker compose -f docker-compose.production.yml up -d
+            sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
+            sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+            sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /static/static/
+            sudo docker system prune -af
 
   auto_tests:
     name: "Auto Tests"
