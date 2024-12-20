@@ -107,6 +107,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            sudo docker system prune -af
+            sudo npm cache clean --force
             cd kittygram
             sudo docker-compose -f docker-compose.production.yml pull
             sudo docker-compose -f docker-compose.production.yml down
@@ -114,23 +116,7 @@ jobs:
             sudo docker-compose -f docker-compose.production.yml exec backend python manage.py migrate
             sudo docker-compose -f docker-compose.production.yml exec backend python manage.py collectstatic
             sudo docker-compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /static/static/
-            sudo docker system prune -af
-
-  # auto_tests:
-  #   name: "Auto Tests"
-  #   needs: deploy
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Run auto-tests
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.SERVER_IP }}
-  #         username: ${{ secrets.SERVER_USER }}
-  #         key: ${{ secrets.SSH_KEY }}
-  #         script: |
-  #           cd ~/kittygram
-  #           docker exec backend python manage.py test
-  #           docker exec frontend npm test
+            
 
   telegram-notify:
     name: "Telegram Notify"
