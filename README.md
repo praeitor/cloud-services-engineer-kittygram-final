@@ -1,3 +1,5 @@
+[![KITTYGRAM CICD workflow](https://github.com/praeitor/kittygram-final/actions/workflows/main.yml/badge.svg?branch=main&event=push)](https://github.com/praeitor/kittygram-final/actions/workflows/main.yml)
+
 #  Как работать с репозиторием финального задания
 
 ## Что нужно сделать
