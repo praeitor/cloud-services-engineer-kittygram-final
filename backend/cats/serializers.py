@@ -1,13 +1,10 @@
 import base64
-
-from django.core.files.base import ContentFile
-from rest_framework import serializers
+import datetime as dt
 import webcolors
 
-
-import datetime as dt
-
 from .models import Achievement, AchievementCat, Cat
+from django.core.files.base import ContentFile
+from rest_framework import serializers
 
 
 class Hex2NameColor(serializers.Field):
