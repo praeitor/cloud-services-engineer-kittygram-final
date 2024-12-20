@@ -44,7 +44,8 @@ class Migration(migrations.Migration):
                  null=True, upload_to='cats/images/')),
                 ('achievements', models.ManyToManyField(
                     through='cats.AchievementCat', to='cats.Achievement')),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                ('owner', models.ForeignKey(on_delete=django.db.models.
+                                            deletion.CASCADE,
                  related_name='cats', to=settings.AUTH_USER_MODEL)),
             ],
         ),
