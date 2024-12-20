@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  tests:
+  backend_tests:
     name: "Backend tests"
     runs-on: ubuntu-latest
     services:
@@ -45,6 +45,7 @@ jobs:
           python manage.py test
 
   frontend_tests:
+    name: "Backend tests"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +64,9 @@ jobs:
 
   push-docker-image:
     name: "Push Docker Image to DockerHub"
-    needs: tests
+    needs: 
+      - backend_tests
+      - frontend_tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
