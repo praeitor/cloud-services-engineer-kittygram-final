@@ -1,17 +1,17 @@
-version: '3.8'
+version: '3'
+
+volumes:
+  pg_data:
+  static:
+  media:
 
 services:
-  gateway:
-    image: praeitor/kittygram_gateway:latest
-    container_name: gateway
-    ports:
-      - "9000:80"
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    env_file: .env
     volumes:
-      - static:/static
-      - media:/media
-    depends_on:
-      - backend
-      - frontend
+      - pg_data:/var/lib/postgresql/data
 
   backend:
     image: praeitor/kittygram_backend:latest
@@ -20,25 +20,18 @@ services:
     volumes:
       - static:/app/static
       - media:/app/media
-    depends_on:
-      - postgres
-
+  
   frontend:
     image: praeitor/kittygram_frontend:latest
     container_name: frontend
     volumes:
       - static:/app/build
-    depends_on:
-      - backend
-
-  postgres:
-    image: postgres:13
-    container_name: postgres
-    env_file: .env
+  
+  gateway:
+    image: praeitor/kittygram_gateway:latest
+    container_name: gateway
+    ports:
+      - "9000:80"
     volumes:
-      - pg_data:/var/lib/postgresql/data
-
-volumes:
-  static:
-  media:
-  pg_data:
+      - static:/static
+      - media:/media
