@@ -6,27 +6,67 @@ on:
       - main
 
 jobs:
-  tests:
-    name: "Tests"
+  backend_tests:
+    name: "Backend tests"
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres_kittygram_user
+          POSTGRES_PASSWORD: postgres_kittygram_password
+          POSTGRES_DB: kittygram
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip 
+          python -m pip install --upgrade pip
+          pip install flake8==6.0.0 flake8-isort==6.0.0
           pip install -r backend/requirements.txt
+          pip install flake8
       - name: Run backend tests
+        env:
+          POSTGRES_USER: postgres_kittygram_user
+          POSTGRES_PASSWORD: postgres_kittygram_password
+          POSTGRES_DB: kittygram
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
         run: |
-          python backend/manage.py test
+          python -m flake8 backend/
+          cd backend/
+          python manage.py test
+
+  frontend_tests:
+    name: "Backend tests"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up nodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: |
+          cd frontend/
+          npm ci
+      - name: Test frontend
+        run: |
+          cd frontend/
+          npm run test
 
   push-docker-image:
     name: "Push Docker Image to DockerHub"
-    needs: tests
+    needs: 
+      - backend_tests
+      - frontend_tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -67,6 +107,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            sudo docker system prune -af
+            sudo npm cache clean --force
             cd kittygram
             sudo docker-compose -f docker-compose.production.yml pull
             sudo docker-compose -f docker-compose.production.yml down
@@ -74,27 +116,11 @@ jobs:
             sudo docker-compose -f docker-compose.production.yml exec backend python manage.py migrate
             sudo docker-compose -f docker-compose.production.yml exec backend python manage.py collectstatic
             sudo docker-compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /static/static/
-            sudo docker system prune -af
-
-  auto_tests:
-    name: "Auto Tests"
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run auto-tests
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd ~/kittygram
-            docker exec backend python manage.py test
-            docker exec frontend npm test
+            
 
   telegram-notify:
     name: "Telegram Notify"
-    needs: auto_tests
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - name: Notify in Telegram
