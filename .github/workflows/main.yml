@@ -114,7 +114,8 @@ jobs:
 
   telegram-notify:
     name: "Telegram Notify"
-    needs: auto_tests
+  #  needs: auto_tests
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - name: Notify in Telegram
