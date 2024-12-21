@@ -3,3 +3,4 @@
 .env
 .gitignore
 _env.example
+venv/
