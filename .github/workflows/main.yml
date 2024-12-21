@@ -40,7 +40,7 @@ jobs:
           DB_HOST: postgres
           DB_PORT: 5432
         run: |
-          export SECRET_KEY=${{ secrets.SECRET_KEY }}
+          export SECRET_KEY='${{ secrets.SECRET_KEY }}'
           python -m flake8 backend/
           cd backend/
           python manage.py test
