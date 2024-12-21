@@ -1,8 +1,5 @@
 
 .DS_Store
 .env
-.github
 .gitignore
-
 _env.example
-.github/workflows/
