@@ -15,6 +15,9 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   backend:
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
     image: praeitor/kittygram_backend:latest
     container_name: backend
     env_file: .env
