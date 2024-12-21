@@ -29,7 +29,7 @@ services:
     image: praeitor/kittygram_frontend:latest
     container_name: frontend
     volumes:
-      - static:/app/build/static
+      - static:/app/build
   
   gateway:
     image: praeitor/kittygram_gateway:latest
