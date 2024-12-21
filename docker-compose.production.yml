@@ -28,9 +28,8 @@ services:
   frontend:
     image: praeitor/kittygram_frontend:latest
     container_name: frontend
-    command: cp -r /app/build/. /static/
     volumes:
-      - static:/app/build
+      - static:/app/build/static
   
   gateway:
     image: praeitor/kittygram_gateway:latest
