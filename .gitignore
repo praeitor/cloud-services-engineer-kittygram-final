@@ -5,3 +5,4 @@
 .gitignore
 
 _env.example
+.github/workflows/
