@@ -1,8 +1,9 @@
+# flake8: noqa
 import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-#
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,8 +14,6 @@ SECRET_KEY = \
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
-STATIC_ROOT = "/app/collected_static"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,7 +65,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'kittygram'),
         'USER': os.getenv('POSTGRES_USER', 'kittygram_user'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'kittygram_password'),
-        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'HOST': os.getenv('DB_HOST', 'postgres'),
         'PORT': os.getenv('DB_PORT', 5432),
     }
 }
@@ -107,7 +106,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
+STATIC_ROOT = '/app/collected_static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
